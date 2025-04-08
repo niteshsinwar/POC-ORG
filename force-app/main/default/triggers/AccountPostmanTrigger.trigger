@@ -3,7 +3,7 @@ trigger AccountPostmanTrigger on Account (after insert) {
         // Iterate through the inserted Account records
         for (Account acc : Trigger.new) {
             // Call a method to send the Account data to Postman
-            PostToPostman.sendAccountToNode(acc.Id, 'valid_user', 'password');
+           // PostToPostman.sendAccountToNode(acc.Id, 'valid_user', 'password');
         }
     }
 }
