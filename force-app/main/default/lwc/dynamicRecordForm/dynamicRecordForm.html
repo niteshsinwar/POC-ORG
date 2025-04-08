@@ -1,0 +1,17 @@
+<template>
+    <lightning-card title="Dynamic Record Form">
+        <template if:true={objectApiName}>
+            <lightning-record-form 
+                object-api-name={objectApiName} 
+                record-id={recordId}
+                layout-type="Full"
+                mode={formMode}
+                onsuccess={handleSuccess}
+                onerror={handleError}>
+            </lightning-record-form>
+        </template>
+        <template if:false={objectApiName}>
+            <div class="slds-p-around_medium">No Object API Name provided.</div>
+        </template>
+    </lightning-card>
+</template>

@@ -1,0 +1,29 @@
+<template>
+    <lightning-card title="PhonePe Payment">
+        <div class="slds-p-around_medium">
+            <lightning-input 
+                label="Amount (₹)" 
+                type="number" 
+                value={amount}
+                onchange={handleAmountChange}>
+            </lightning-input>
+            
+            <div class="slds-m-top_medium">
+                <lightning-button 
+                    label="Pay with PhonePe" 
+                    variant="brand"
+                    onclick={initiatePayment}
+                    disabled={isProcessing}>
+                </lightning-button>
+            </div>
+            
+            <div if:true={isProcessing} class="slds-m-top_small">
+                <lightning-spinner alternative-text="Processing payment..."></lightning-spinner>
+            </div>
+            
+            <div if:true={paymentUrl} class="slds-m-top_medium">
+                <iframe src={paymentUrl} width="100%" height="500px"></iframe>
+            </div>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,63 @@
+<template>
+    <lightning-card title="Object Selector">
+        <div class="slds-p-around_medium">
+            <!-- Step 1: Select Object and Choose Create or Update -->
+            <template if:true={isStep1}>
+                <lightning-combobox
+                    name="objectType"
+                    label="Select Object"
+                    value={selectedObject}
+                    placeholder="Choose an Object"
+                    options={objectOptions}
+                    onchange={handleObjectChange}
+                    required>
+                </lightning-combobox>
+    
+                <lightning-input
+                    type="checkbox"
+                    label="Create Record?"
+                    checked={isCreate}
+                    onchange={handleCreateChange}>
+                </lightning-input>
+    
+                <lightning-button
+                    label="Next"
+                    variant="brand"
+                    onclick={handleNext}
+                    class="slds-m-top_medium"
+                    disabled={isStep1NextDisabled}>
+                </lightning-button>
+            </template>
+    
+            <!-- Step 2: (Only for Update) Select Record to Update -->
+            <template if:true={isStep2}>
+                <lightning-combobox
+                    name="recordSelect"
+                    label="Select Record to Update"
+                    value={selectedRecordId}
+                    placeholder="Choose a Record"
+                    options={recordOptions}
+                    onchange={handleRecordChange}
+                    required>
+                </lightning-combobox>
+    
+                <lightning-button
+                    label="Next"
+                    variant="brand"
+                    onclick={handleNext}
+                    class="slds-m-top_medium"
+                    disabled={isStep2NextDisabled}>
+                </lightning-button>
+            </template>
+        </div>
+    </lightning-card>
+    
+    <!-- Step 3: Render the Dynamic Record Form -->
+    <template if:true={isStep3}>
+        <c-dynamic-record-form 
+            object-api-name={selectedObject} 
+            record-id={selectedRecordId} 
+            form-mode="edit">
+        </c-dynamic-record-form>
+    </template>
+</template>

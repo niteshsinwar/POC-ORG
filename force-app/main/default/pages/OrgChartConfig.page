@@ -1,0 +1,294 @@
+<apex:page controller="OrgChartConfigController" showHeader="false" sidebar="false">
+    <apex:form >
+    	<apex:actionFunction name="save" action="{!save}" rerender="config" oncomplete="console.log('saved');"/>
+        <!-- StyleSheet --> 
+        <style>
+            h1 {font-weight: bold; color:#69c; font-size:x-large;}
+            h2 {font-weight: bold; font-size:medium;}
+            h3 {font-weight: bold; font-size:small;}
+            hr {border-width: 2px;}
+            form {padding: 10px;}
+        </style>
+        
+        <!-- org chart logo -->
+        <div align="center">
+            <apex:image id="logoImg" url="{!URLFOR($Resource.orgChart, 'orgChart/images/logo.png')}" width="200" height="200"></apex:image>
+        </div>
+        
+        <br/><br/>
+        
+        <!-- Welcome message & Org Chart Requirements -->
+        <h1>Installating Org Chart</h1><br/><br/>
+
+        
+        <!-- Page Navigation Links -->
+        <ul>
+            <li><h3><a href="#part1">Deploy to Heroku </a></h3><br/><br/></li>
+            <li><h3><a href="#part2">Create a New Connected App</a></h3><br/><br/></li>
+            <li><h3><a href="#part3">Change OAuth Policies </a></h3><br/><br/></li>            
+            <li><h3><a href="#part4">Enable User Group Profile Permissions</a></h3><br/><br/></li>
+            <li><h3><a href="#part5">Add to Your Mobile Navigation Menu </a></h3><br/><br/></li>
+            <li><h3><a href="#part6">Heroku Set-up </a></h3><br/><br/></li>
+            <li><h3><a href="#part7">Heroku Connect Set-up </a></h3><br/><br/></li>
+        </ul> 
+        <br/><hr></hr><br/>
+         
+ 
+        <!-- radio button selection -->
+        <h2>Configure For Users or Contacts</h2>
+        <ul id="config">
+            <li>
+                Org Chart can create a hierarchy from users or contacts. Please select one of the following fields for your Org Chart instance to be built from.
+                <apex:selectRadio id="hierRadioOptions" value="{!orgChartConfig.orgHierarchyType__c}" immediate="true" onchange="save()">
+                    <apex:selectOptions value="{!hierarchyValues}"/>
+                </apex:selectRadio>
+             </li>   
+        </ul>        
+        <br/><hr></hr><br/>
+
+
+        <!-- Deploy to Heroku -->
+        <h2 id="part1" >Deploy to Heroku</h2>
+        <ul>
+            <li>
+                Use this "Deploy to Heroku" button to install the Org Chart app to your Heroku instance. <br/>
+                (Remember the name you give your app, as you will need it when creating the Connected App in your org.)<br/><br/>
+                
+                <a href="https://www.heroku.com/deploy?template=https://github.com/salesforce-it/Salesforce-OrgChart" target="_blank">
+                    <img src="https://www.herokucdn.com/deploy/button.png" alt="Deploy"></img><br/>
+                </a><br/>
+            </li>
+        </ul>
+        <br/><hr></hr><br/>
+
+
+        <!-- Deploy to Heroku -->
+        <h2 id="part1" >Download Required Files From Documents</h2>
+        <ul>
+            <li>
+                Navigate to the Org's documents page by
+                <a href="/015/o" target="_blank">
+                clicking here
+                </a>. 
+            </li><br/><br/> 
+            <li>
+                From the documents page, locate the <b>Folder</b> picklist and select, <b>OrgChartFiles</b>.
+            </li><br/><br/>
+            <li>
+                Download the database schema (will need later).
+            </li><br/><br/>
+            <li>
+                Copy the <b>OrgChartIcon</b> URL. Click on the <b>View</b> link, this should open a new window with the just the Org Chart icon on the page, copy this URL. (You will need it for the next step.)
+            </li>
+        </ul>
+        <br/><hr></hr><br/>
+        
+        
+        <!-- Create a new connected app -->
+        <h2 id="part2" >Create a New Connected App</h2>
+        <ol>
+            <li>
+                Create a canvas connected app in your Salesforce Org, 
+                <a href="/app/mgmt/forceconnectedapps/forceAppEdit.apexp" target="_blank">
+                click here 
+                </a>to navigate to the setup page. Then make sure to fill in all of the following fields. 
+            </li><br/><br/> 
+            <li>
+                Enter your basic information. <br/><br/>
+                <apex:image id="image1" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/1.png')}" height="350px" width="700px" />
+            </li><br/><br/>
+            <li>
+                Enable <b>OAuth</b> Settings, include the <b>Callback URL</b> and add <b>Full access(full)</b> to the selected OAuth scope. The callback URL is https://<b>[your app name on Heroku]</b>.herokuapp.com<br/><br/>
+                <apex:image id="image2" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/2.png')}"  />
+            </li><br/><br/>
+                        <li>
+                Fill in the canvas app settings. Check the <b>Force.com Canvas</b> box. For the <b>Canvas App URL</b> use the callback URL, but make sure to append /auth/signedrequest to the URL. Then make sure to select <b>Signed Request (POST)</b> for the <b>Access Method</b>. Finally add Mobile Nav to your Select Locations<br/><br/>
+                <apex:image id="image3" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/3.png')}"  />
+            </li><br/><br/>
+            <li>
+                Click <b>save</b>.
+            </li>
+        </ol>
+        <br/><br/><hr></hr><br/>
+        
+        
+        <!-- Change OAuth Policies -->
+        <h2 id="part3">Change OAuth Policies</h2>
+        <ol>
+            <li>
+                Navigate to the <b>Connected Apps</b> menu, 
+                <a href="/02u?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DDevTools&setupid=TabSet" target="_blank">
+                click here</a>. Next, click the <b>Manage</b> action on your Org Chart application, then click on the <b>Edit</b> button.             
+            </li><br/>
+                    
+            <li>
+                Change your <b>OAuth</b> settings to match the image below.<br/><br/>
+                <apex:image id="image5" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/5.png')}"  />
+            </li><br/>
+            <li>
+                Click <b>save</b>.
+            </li>
+        </ol>
+        <br/><br/><br/><hr></hr><br/>
+        
+
+        <!-- Enable User Group Profile Permissions -->
+        <h2 id="part4">Enable User Group Profile Permissions</h2>
+        <ol>
+            <li>
+                Navigate to the <b>Connected Apps</b> menu, 
+                <a href="/02u?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DDevTools&setupid=TabSet" target="_blank">
+                click here</a>. Then click the <b>Manage</b> action for your Org Chart application.             
+            </li><br/>
+            <li>
+                Locate the Profiles, and click the <b>Manage Profiles</b> button.<br/><br/>
+                <apex:image id="image6" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/6.png')}"  />
+            </li><br/>
+            <li>
+                This next screen contains a list of all the available user profile groups. Select all the user groups that you want to be able to access your application. 
+            </li><br/>
+            <li>
+                Click <b>save</b>.
+            </li>
+        </ol>
+        <br/><br/><hr></hr><br/>
+        
+        
+ 		<!-- Add to your mobile nav menu -->
+        <h2 id="part5">Add to Your Mobile Navigation Menu</h2>
+        <ol>
+            <li>
+                Navigate to the <b>Mobile Navigation Menu</b>, 
+                <a href="/setup/salesforce1AppMenu.apexp?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DMobileAdministration&setupid=ProjectOneAppMenu" target="_blank">
+                click here</a>.          
+            </li><br/>
+            <li>
+                Add your application to the <b>Selected Navigation Menu Items</b> (you can also use the up and down buttons to change the order in which your app will appear). <br/><br/>
+                <apex:image id="image4" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/4.png')}"  />
+            </li><br/>
+            <li>
+                Click <b>save</b>.
+            </li>
+        </ol>
+        <br/><br/><hr></hr><br/>
+        
+
+        <!-- Heroku Set-up -->
+        <h2 id="part6">Heroku Set-up</h2>
+        <ol>
+            <li>
+            	Retrieve your <b>Consumer Secret</b> by clicking
+                <a href="/02u?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DDevTools&setupid=TabSet" target="_blank">
+                this link</a>, then click on the link for your application. Click on <b>Click to Reveal</b> to reveal your <b>Consumer Secret</b>.
+            </li><br/>
+            <li>
+                Retrieve your Consumer Secret from your connected app and set it as an environmental variable with the name <b>APP_SECRET</b> 
+                <a href="https://dashboard.heroku.com/" target="_blank"> click here </a>
+                to navigate to the Heroku dashboard.
+                <br/><br/>
+            </li>
+            <li>
+                Make sure your app is selected. Then click the <b>Settings</b> <br/><br/>
+                <apex:image id="image8" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/8.png')}"  />
+            </li><br/>
+            <li>
+                Click the <b>Reveal Config Vars</b> button <br/><br/>
+                <apex:image id="image9" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/9.png')}"  />
+            </li><br/>
+            <li>
+                Click the <b>Edit</b> button enter the <b>KEY</b> as <b>APP_SECRET</b>, and the <b>VALUE</b> as your app secret from the newly created connnected app from your Org. <br/><br/>
+                <apex:image id="image10" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/10.png')}"  />
+            </li><br/>
+            <li>
+                Click <b>save</b>.
+            </li>
+        </ol>
+        <br/><br/><hr></hr><br/>
+        
+        
+        
+        <!-- Heroku connect set-up -->
+        <h2 id="part7">Heroku Connect Set-up</h2>
+        <ol>
+            <li>
+                Go back to the resources page or 
+                <a href="https://dashboard.heroku.com/" target="_blank"> click here </a>
+                to navigate to the Heroku dashboard.
+            </li><br/>
+            <li>
+                Locate the Add-Ons from the resources page and click on <b>Heroku Connect</b>. <br/><br/>
+                <apex:image id="image11" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/11.png')}"  />
+            </li><br/>
+            <li>
+                Click the <b>Begin Setup</b> button. <br/><br/>
+                <apex:image id="image12" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/12.png')}"  />
+            </li><br/>
+             <li>
+                Heroku Connect will prompt you to Authorize and link the connection to your Salesforce data. Select <b>Production</b>, and then log-in to your Salesforce Org and allow permissions to the app.
+            </li><br/>
+            <li>
+                From the Heroku Connect home screen click on <b>Settings</b> then click on <b>Import/Export Configuration</b>.<br/><br/>
+                <apex:image id="image13" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/13.png')}"  />
+            </li><br/>
+            <li>
+                Click the <b>Import</b> Button.<br/><br/>
+                <apex:image id="image14" style="border: 2px solid grey;" url="{!URLFOR($Resource.orgChart, 'orgChart/images/14.png')}" />
+            </li><br/>
+            <li>
+                Use the downloaded <b>DataBaseSchema.JSON</b> file (in the documents), and import the data base schema into the Heroku Configuration.<br/><br/>
+            </li><br/>
+            <li>
+                Click on the <b>Choose a File</b> button and upload the <b>DataBaseSchema.JSON</b> file. 
+            </li>
+       </ol>
+       <br/><br/><hr></hr><br/>
+       
+       
+       
+        <!-- WOOO DONE!! -->
+       <h2>DONE!</h2>
+       <ul>
+          <li>
+              Restart the heroku server, log into
+               <a href="https://connect.heroku.com/" target="_blank">
+               Heroku Connect</a>, and click <b>Settings</b> tab, next click 
+              <b>Manage Connection</b> link, then click the <b>Restart</b> button.
+           </li><br/><br/>
+           <li>
+               Test out your installed Org Chart application in Salesforce mobile, by  
+               <a href="/one/one.app" target="_blank"> clicking here</a>. 
+           </li>
+       </ul>    
+       <br/><br/><hr></hr><br/>
+
+
+        <!-- Optimizations -->
+       <h2>Optimizations</h2>
+       <ul>
+           <li>
+               The free tier Heroku instance only allows a connection of 10,000 rows of data, 
+               if you need more rows to be connected you can remove the mapping
+               that you are currently not using.<br/><br/>
+               For example if you selected <b>Users</b> for your configuration,
+               you can go to 
+               <a href="https://connect.heroku.com/" target="_blank">
+               Heroku Connect</a> and delete the mapping for <b>Contacts</b>.
+           </li>
+       </ul>    
+       <br/><br/><hr></hr><br/>
+
+
+
+        <!-- Optimizations -->
+       <h2>Local Set-up</h2>
+       <ul>
+           <li>
+               Org Chart can be set up to run locally, visit the 
+               <a href="https://github.com/salesforce-it/Salesforce-OrgChart" target="_blank">
+               Git Repository</a> for instructions on setting this up.
+           </li>
+       </ul>    
+        
+        
+    </apex:form>
+</apex:page>
