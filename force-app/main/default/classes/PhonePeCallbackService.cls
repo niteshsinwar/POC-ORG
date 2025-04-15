@@ -53,7 +53,7 @@ global static void handleRedirect() {
     String homePageUrl = URL.getOrgDomainUrl().toExternalForm() + '/lightning/page/home';
     String redirectUrl = homePageUrl + '?paymentStatus=' + status + '&txnId=' + merchantTransactionId;
     
-    res.statusCode = 302;
+    req.statusCode = 302;
     res.headers.put('Location', redirectUrl);
 }
 }
