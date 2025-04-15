@@ -6,7 +6,7 @@ import checkPaymentStatus from '@salesforce/apex/PhonePeController.checkPaymentS
 export default class PaymentForm extends LightningElement {
     @track amount = 1;
     @track isProcessing = false;
-    @track paymentUrl = '';
+    @track paymentUrls = '';
     @track merchantTransactionId = '';
     
     handleAmountChange(event) {
